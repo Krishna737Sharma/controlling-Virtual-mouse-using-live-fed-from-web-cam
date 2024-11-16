@@ -14,7 +14,7 @@ This Python project allows users to control their computer's mouse cursor using 
 - **Right Click:** Perform a right mouse click when the hand shows four defects.
 - **Visual Feedback:** Displays real-time feedback on the webcam feed, showing detected defects and the corresponding actions (mouse movement, clicks).
 - **Customizable Thresholds:** Customize the number of defects required for different actions.
-
+![2 defect mouse movement](https://github.com/user-attachments/assets/3cc86100-1327-4565-af9a-d26f6aaad4e7)
 ## Requirements
 
 - Python 3.x
