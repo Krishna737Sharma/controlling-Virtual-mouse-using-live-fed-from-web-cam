@@ -5,9 +5,9 @@
 ![4 defect right click action](https://github.com/user-attachments/assets/bc38f211-6635-4291-a807-416d68c11ccd)
 
 # Visual results
+![vid capture](https://github.com/user-attachments/assets/de24d0d9-76f5-42f6-bc0b-1d796bbee089)
 ![mouse movement](https://github.com/user-attachments/assets/733d05fb-9f31-4ba5-8bf0-f22399503108)
 ![left click](https://github.com/user-attachments/assets/dfee2e73-0c49-4f74-952a-574c3482249d)
-![vid capture](https://github.com/user-attachments/assets/de24d0d9-76f5-42f6-bc0b-1d796bbee089)
 ![right click](https://github.com/user-attachments/assets/ea9545ba-529b-468d-a307-e2b054bb0db3)
 
 # Pre-processing
