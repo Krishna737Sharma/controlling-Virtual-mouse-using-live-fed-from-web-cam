@@ -13,3 +13,8 @@
 # Pre-processing
 ![pre processing](https://github.com/user-attachments/assets/45a94fe2-c12b-4bd4-8a73-fbd3d6f0456a)
 ![defects](https://github.com/user-attachments/assets/53f35327-ea28-4c00-8357-24bed256ee9e)
+
+# Final Demostration
+https://github.com/user-attachments/assets/b91f33ea-6b7e-4006-8678-17d6e6f977b2
+
+on VML project.mp4…
