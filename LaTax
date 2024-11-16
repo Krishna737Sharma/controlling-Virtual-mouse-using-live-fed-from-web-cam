@@ -1,0 +1,244 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{hyperref}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Controlling a Virtual Mouse using the live feed coming from the Webcam\\
+}
+
+\author{\IEEEauthorblockN{Yash Mohan Jadhav}
+\IEEEauthorblockA{\textit{Department of Artificial Intelligence} \\
+\textit{Indian Institute of Technology Kharagpur}\\
+West Bengal, India \\
+}
+\and
+\IEEEauthorblockN{Krishna Kumar Sharma}
+\IEEEauthorblockA{\textit{Department of Artificial Intelligence} \\
+\textit{Indian Institute of Technology Kharagpur}\\
+West Bengal, India \\
+}
+}
+
+\maketitle
+
+\begin{abstract}
+This project introduces a computer-vision-based hand gesture recognition system designed to control mouse movements and perform clicks without physical contact. Using a standard webcam and Python, the system captures and processes hand gestures in real time to emulate mouse actions. The program applies image pre-processing techniques, contour detection, and convexity defect analysis to identify specific gestures for moving, left-clicking, and right-clicking. This gesture-based control system aims to provide an alternative input method for individuals with disabilities or users in sterile environments. The experimental results indicate the feasibility of the approach and highlight areas for improvement in gesture recognition accuracy and responsiveness.
+\end{abstract}
+
+\begin{IEEEkeywords}
+human-computer interaction , Hand Gestures , Video Capture , Contour Detection , Convexity Defects , Virtual mouse
+\end{IEEEkeywords}
+
+\section{Introduction}
+With the rapid advancement of computer vision technology, gesture-based control has become an innovative area for human-computer interaction (HCI). Traditional input devices, such as the mouse and keyboard, may not be practical or accessible in all environments or for all users. Gesture recognition offers a contactless and intuitive alternative, particularly beneficial for accessibility and sterile environments. This project demonstrates a webcam-based system that uses hand gestures to control mouse actions like movement, left-click, and right-click. By leveraging Python libraries like OpenCV and PyAutoGUI, the system can detect specific gestures based on hand contour features in real time, offering a new method for intuitive computer interaction while keeping the implementation cheap and easy compared to other methods.making it ideal in rapid and mass deployment in emergency cases.
+\section{Related Works}
+Gesture recognition has been a significant research area in HCI due to it's helpfulness
+\subsection{Using Wearable Glove with Sensors}
+
+Early approaches relied on sensor-based systems,like with a wearable gloves with sensors to capture finger movements which then will be used for hand gesture detection, which provided accurate results but were costly and less accessible due to its complex manufacturing as well as its custom nature as it has to be calibrated or custom made to each hand type. Making it less viable for mass deployment.
+ 
+\subsection{Using Machine Learning}
+Recent work has leveraged machine learning and computer vision techniques to develop hand gesture recognition systems without physical devices, using cameras to detect gestures through skin color segmentation and contour analysis [2]. Studies using deep learning methods, such as convolutional neural networks (CNNs), have demonstrated improved accuracy in gesture recognition. Making it really good for mass deployment. however, they often require large datasets and extensive computational resources making it not ideal for cheap and quick deployment in new fields.
+
+\section{Methodology}
+
+The proposed system uses Python, OpenCV, and PyAutoGUI libraries to interpret hand gestures from a webcam feed and emulate mouse actions. The methodology consists of several stages:
+\subsection{Video Capture}
+This project is utilizing a captured live video taken from the webcam of the device as a input for the pre-processing before the detection of the hand is to be performed.We are using the  opencv-python library for cv2.VideoCapture as it has the necessary function for  capturing of the live video.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.4\textwidth]{vid capture.PNG}}
+\caption{the live feed}
+\label{fig}
+\end{figure}
+
+\subsection{Pre - processing}
+In this project we are flips the image horizontally to create a mirror effect.Then we are applying a gray scale to the frame using cv2.cvtColor for adding consistency in processing the frame. Then applying Gaussian blur using cv2.GaussianBlur to smoothen the frame and  to reduce noise.then a  binary thresholding with Otsu's method using cv2.threshold is applied for converting it to a binary image  that highlights the hand's shape.
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.4\textwidth]{pre processing.PNG}}
+\caption{GaussianBlur and Otsu's binary thresholding applied to the live feed}
+\label{fig}
+\end{figure}
+
+\subsection{Contour Detection}
+In computer vision, a contour is like a digital representation of that outline. It can be described as the series of connected points that define the boundary of an object, separating and/or highlighting it from the background. These points tend to share similar color or intensity values, making them distinct from their surroundings.\\
+In this project we are using Contour Detection to help us find our hand and separate it from the background noise.\\
+Take the largest contours based on the contour Area of the contours that will most likely to be the hand and this process will remove all small disjointed contour that may produce from the background noise.
+\subsection{convexity hall}
+The convex hull is the smallest convex set that encloses all the points, forming a convex polygon\\
+In this project we are using the newly taken Convex Hull to find the convexity defects.
+\subsection{convexity defects}
+Any deviation of the contour from its convex hull is known as the convexity defect\\
+we are going to take the deepest vallies in the dataset as or final defects \\
+Based on all the convexity defect find the angles and distances between the convexity defects to identify if there is a finger or not\\
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.38\textwidth]{defects.PNG}}
+\caption{convexity hall and convexity defects applied to the live feed}
+\label{fig}
+\end{figure}
+
+
+\begin{algorithm}
+\caption{Gesture Recognition with Mouse Control}
+\begin{algorithmic}[1]
+
+\STATE \textbf{Initialize:}
+\STATE Disable PyAutoGUI failsafe.
+\STATE Get screen resolution $(SCREEN\_X, SCREEN\_Y)$.
+\STATE Initialize variables: $CLICK \gets \text{None}$, $MOVEMENT\_START \gets \text{None}$.
+
+\STATE \textbf{Start Video Capture:}
+\STATE Capture video from the default webcam.
+
+\WHILE{video capture is open}
+    \STATE Capture a frame from the webcam.
+    \IF{frame is invalid}
+        \STATE \textbf{Break} the loop.
+    \ENDIF
+
+    \STATE Flip the frame horizontally.
+    \STATE Convert the frame to grayscale.
+    \STATE Apply Gaussian blur to reduce noise.
+    \STATE Apply Otsu's thresholding to create a binary image.
+
+    \STATE \textbf{Find Contours:}
+    \STATE Detect all contours in the binary image.
+    \STATE Identify the largest contour based on area.
+
+    \IF{largest contour exists}
+        \STATE Draw a bounding rectangle around the contour.
+        \STATE Compute the convex hull of the contour.
+        \STATE Identify convexity defects in the hull.
+
+        \STATE \textbf{Process Defects:}
+        \STATE Initialize $count\_defects \gets 0$ and $used\_defect \gets \text{None}$.
+        \FOR{each defect in the contour}
+            \STATE Calculate triangle sides and angle at the far point.
+            \IF{angle $\leq 90^\circ$}
+                \STATE Increment $count\_defects$.
+                \STATE Mark the far point as a valid defect.
+                \IF{$count\_defects == 2$}
+                    \STATE Track the defect as $used\_defect$.
+                \ENDIF
+            \ENDIF
+        \ENDFOR
+
+        \STATE \textbf{Perform Actions Based on Defects:}
+        \IF{$count\_defects == 2$}
+            \STATE Move mouse based on the tracked defect.
+        \ELSIF{$count\_defects == 3$ and $CLICK == \text{None}$}
+            \STATE Perform a left click.
+            \STATE Set $CLICK \gets \text{current\_time}$.
+        \ELSIF{$count\_defects == 4$ and $CLICK == \text{None}$}
+            \STATE Perform a right click.
+            \STATE Set $CLICK \gets \text{current\_time}$.
+        \ENDIF
+    \ENDIF
+
+    \STATE Display the frame with annotations.
+    \IF{ESC key is pressed}
+        \STATE \textbf{Break} the loop.
+    \ENDIF
+\ENDWHILE
+
+\STATE Release video capture and close all windows.
+
+\end{algorithmic}
+\end{algorithm}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.37\textwidth]{block pdf file-1.png}}
+\caption{the block diagram of the project}
+\label{fig}
+\end{figure}
+
+\subsection{Identify specific gestures}
+Using the previously mentioned number of defects we can use them to control the mouse \\
+As we can select certain options based on the specific number of defects we can perform the following:\\
+1. mouse movement if 2 number of defects are counted \\
+2. left click action if 3 number of defects are counted \\
+3. right click action if 4 number of defects are counted \\
+
+\section{Experimental Result}
+as the project is based on live feed and active processioning the detection of the hand gestures are as follows
+\subsection{Identify mouse movement gestures}
+when number of defects are 2 then mouse movement is performed \\
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.37\textwidth]{mouse movement.PNG}}
+\caption{mouse movement gestures}
+\label{fig}
+\end{figure}
+
+\subsection{Identify Left Click gestures}
+when number of defects are 3 then Left Click action is performed \\
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.37\textwidth]{left click.PNG}}
+\caption{Left Click gestures}
+\label{fig}
+\end{figure}
+
+\subsection{Identify Right Click gestures}
+when number of defects are 4 then Right Click action is performed \\
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.37\textwidth]{right click.PNG}}
+\caption{Right Click gestures}
+\label{fig}
+\end{figure}
+
+\section{Demonstration}
+You can access the Demonstration file on Google Drive by clicking the following link:\\
+\href{https://drive.google.com/drive/folders/1kRAQdkCyjkeLZtmsYY1cve65aK-Wq_GL?usp=sharing}{\textcolor{blue}{Click here to access the Google Drive file}}
+
+
+\section{Conclusion}
+\begin{itemize}
+\item \textbf{Gesture Detection Accuracy :} Accurate gesture recognition was observed in controlled lighting conditions as well as keeping a clear background . Performance degrades in low-light or low contrast situations due to variations in contour detection.
+\item \textbf{Responsiveness :} Real-time performance was achieved with minimal delay, but rapid hand movements led to occasional missed gestures due to the motion blur occurred in the camera.
+\item \textbf{Shortcomings :} fine movement control was quite challenging, indicating that may be a need of more calibration adjustments might be necessary .
+
+\end{itemize}
+
+\section{Future Work}
+Future work includes refining the gesture detection model, possibly by integrating machine learning models to improve accuracy across varying lighting conditions. Additionally, extending the gesture vocabulary and enhancing tracking stability will make the system more robust for practical applications.
+
+\section*{References}
+\begin{itemize}
+  \item Mistry, P., Maes, P., & Chang, L. (2009). WUW - Wear Ur World: A Wearable Gestural Interface. Proceedings of the SIGCHI Conference on Human Factors in Computing Systems.
+  \item Yang, Y., Tian, Y., & Gao, W. (2012). Skin-Color Segmentation-Based Hand Gesture Recognition. Journal of Information and Computational Science.
+  \item Zhang, J., & Chang, X. (2017). Real-Time Hand Gesture Recognition Based on Deep Learning. IEEE Transactions on Multimedia.
+\end{itemize}
+\\
+
+\section*{Appendix: Contribution}
+In this project, two students worked collaboratively on different components. Their contributions are as follows:\\
+
+Student 1: Yash Mohan Jadhav
+\begin{itemize}
+  \item Conceptualization: in determining on what can be used for hand detection.
+  \item Data Curation: in setting up the live camera feed.
+  \item Methodology: implemented the pre-processing and choosing of the contour with the highest area for background removal and hand isolation.
+  \item Writing – Original Draft: lead the project presentation and report making process
+\end{itemize}
+\\
+Student 2: Krishna Kumar Sharma
+\begin{itemize}
+  \item Conceptualization: in determining that convexity defect can be used for hand gesture detection process.
+  \item Data Curation: test the working of the code.
+  \item Methodology: implemented the contour detection and convex hull code.
+  \item Writing – Original Draft: lead the code making process and live implementation.
+\end{itemize}
+
+\end{document}
